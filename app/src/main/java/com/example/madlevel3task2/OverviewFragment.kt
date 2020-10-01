@@ -1,24 +1,20 @@
 package com.example.madlevel3task2
 
-import android.app.PendingIntent
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madlevel3task2.databinding.OverviewFragmentBinding
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -26,7 +22,7 @@ import com.example.madlevel3task2.databinding.OverviewFragmentBinding
 class OverviewFragment : Fragment() {
 
     private lateinit var binding: OverviewFragmentBinding
-    private var customTabHelper: CustomTabHelper = CustomTabHelper()
+//    private var customTabHelper: CustomTabHelper = CustomTabHelper()
 
 
     private val portals = arrayListOf<PortalCard>()
@@ -85,55 +81,62 @@ class OverviewFragment : Fragment() {
         }
     }
 
+
     private fun portalCardClicked(portalCard: PortalCard) {
         val url = portalCard.url
-        val builder = CustomTabsIntent.Builder()
 
-        // modify toolbar color
-        builder.setToolbarColor(ContextCompat.getColor(this.requireContext(), R.color.colorPrimary))
+        val browserIntent =
+            Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
 
-        // add share button to overflow menu
-        builder.addDefaultShareMenuItem()
 
-        val anotherCustomTab = CustomTabsIntent.Builder().build()
-
-        val requestCode = 100
-        val intent = anotherCustomTab.intent
-        intent.data = Uri.parse(url)
-
-        val pendingIntent = PendingIntent.getActivity(this.requireContext(),
-            requestCode,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT)
-
-        builder.addMenuItem("Sample item", pendingIntent)
-
-        // menu item icon
-        val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
-        builder.setActionButton(bitmap, "Android", pendingIntent, true)
-
-        // modify back button icon
-        builder.setCloseButtonIcon(bitmap)
-
-        // show website title
-        builder.setShowTitle(true)
-
-        // animation for enter and exit of tab
-        builder.setStartAnimations(this.requireContext(), android.R.anim.fade_in, android.R.anim.fade_out)
-        builder.setExitAnimations(this.requireContext(), android.R.anim.fade_in, android.R.anim.fade_out)
-
-        val customTabsIntent = builder.build()
-
-        // check is chrom available
-        val packageName = customTabHelper.getPackageNameToUse(this.requireContext(), url)
-
-        if (packageName == null) {
-            // if chrome not available open in web view
-            val intentOpenUri = Intent(this.requireContext(), WebViewActivity::class.java)
-            startActivity(intentOpenUri)
-        } else {
-            customTabsIntent.intent.setPackage(packageName)
-            customTabsIntent.launchUrl(this.requireContext(), Uri.parse(url))
-        }
+//        val builder = CustomTabsIntent.Builder()
+//
+//        // modify toolbar color
+//        builder.setToolbarColor(ContextCompat.getColor(this.requireContext(), R.color.colorPrimary))
+//
+//        // add share button to overflow menu
+//        builder.addDefaultShareMenuItem()
+//
+//        val anotherCustomTab = CustomTabsIntent.Builder().build()
+//
+//        val requestCode = 100
+//        val intent = anotherCustomTab.intent
+//        intent.data = Uri.parse(url)
+//
+//        val pendingIntent = PendingIntent.getActivity(this.requireContext(),
+//            requestCode,
+//            intent,
+//            PendingIntent.FLAG_UPDATE_CURRENT)
+//
+//        builder.addMenuItem("Sample item", pendingIntent)
+//
+//        // menu item icon
+//        val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+//        builder.setActionButton(bitmap, "Android", pendingIntent, true)
+//
+//        // modify back button icon
+//        builder.setCloseButtonIcon(bitmap)
+//
+//        // show website title
+//        builder.setShowTitle(true)
+//
+//        // animation for enter and exit of tab
+//        builder.setStartAnimations(this.requireContext(), android.R.anim.fade_in, android.R.anim.fade_out)
+//        builder.setExitAnimations(this.requireContext(), android.R.anim.fade_in, android.R.anim.fade_out)
+//
+//        val customTabsIntent = builder.build()
+//
+//        // check is chrom available
+//        val packageName = customTabHelper.getPackageNameToUse(this.requireContext(), url)
+//        Log.ERROR
+//        if (packageName == null) {
+//            // if chrome not available open in web view
+//            val intentOpenUri = Intent(this.requireContext(), WebViewActivity::class.java)
+//            startActivity(intentOpenUri)
+//        } else {
+//            customTabsIntent.intent.setPackage(packageName)
+//            customTabsIntent.launchUrl(this.requireContext(), Uri.parse(url))
+//        }
     }
 }
